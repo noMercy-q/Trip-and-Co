@@ -1,6 +1,6 @@
 from app.services.aviasales_service import AviasalesService
 from api_clients.aviasales_client import AviasalesClient
-from app.services.postgres_service import PostgresService, TripCreate
+from app.services.postgres_service import PostgresService
 from db.client import PostgresClient
 
 import os

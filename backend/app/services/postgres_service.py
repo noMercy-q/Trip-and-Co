@@ -2,19 +2,10 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
+from app import schemas
+
 from db.client import PostgresClient
 from db.models import Trip, City
-
-
-class TripCreate(BaseModel):
-    name: str
-    origin_city_id: str
-    dest_city_id: str
-    created_by: int
-    start_date: datetime
-    end_date: datetime
-    description: Optional[str] = None
-
 
 
 class PostgresService:
@@ -26,11 +17,16 @@ class PostgresService:
         cities = await self.client.select_all(City)
 
         for city in cities:
-            data.append(f"{city.city_name} ({city.city_id})")
+            data.append(
+                schemas.City(
+                    name=city.city_name,
+                    code=city.city_id,
+                ),
+            )
 
         return data
 
-    async def create_trip(self, trip: TripCreate):
+    async def create_trip(self, trip: schemas.TripCreate):
         new_trip = Trip(
             name=trip.name,
             description=trip.description,
