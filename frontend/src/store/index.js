@@ -1,14 +1,62 @@
-import { createStore } from 'vuex'
+import {createStore} from 'vuex'
 
 export default createStore({
+    state: {
+        auth: {
+            token: null,
+        }
+    },
+    getters: {
+        isAuthenticated: (state) => !!state.auth.token,
+    },
+    mutations: {
+        setToken(state, token) {
+            state.auth.token = token
+        },
+        clearToken(state) {
+            state.auth.token = null;
+        },
+    },
+    actions: {
+        login({commit}, token) {
+            commit('setToken', token);
+        },
+        logout({commit}) {
+            commit('clearToken');
+        },
+    },
+    modules: {}
+})
+
+
+/*
+
+// store/index.js
+export default new Vuex.Store({
   state: {
-  },
-  getters: {
+    auth: {
+      token: null, // Здесь хранится токен
+    },
   },
   mutations: {
+    setToken(state, token) {
+      state.auth.token = token;
+    },
+    clearToken(state) {
+      state.auth.token = null;
+    },
   },
   actions: {
+    login({ commit }, token) {
+      commit('setToken', token);
+    },
+    logout({ commit }) {
+      commit('clearToken');
+    },
   },
-  modules: {
-  }
-})
+  getters: {
+    isAuthenticated: (state) => !!state.auth.token,
+  },
+});
+
+ */
