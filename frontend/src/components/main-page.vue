@@ -20,16 +20,14 @@
         :key="n"
         :value="n"
       >
-        <!-- <v-container v-if="tab==1"> -->
           <div v-if="tab==1">
-            <v-sheet class="d-flex align-end flex-column" width="40%">      
+            <v-sheet class="d-flex align-end flex-column" width="40%" min-height="800">      
               <v-date-picker
                 v-model="selectedDates"
                 :min="minDate"
                 :max="maxDate"
                 multiple="range"
                 width="400"
-                class="ml-10"
               >
                 <template #title />
                 <template #header>
@@ -41,33 +39,33 @@
             </v-sheet>
           </div>
 
-
           <div v-else-if="tab==3">
             <v-sheet
-              class="d-flex flex-row"
+              class="d-flex flex-row ma-10"
             >
               <v-sheet
-                class="d-flex align-content-start flex-wrap bg-surface-variant"
-                width="50%"
+                class="d-flex align-content-start flex-wrap"
+                width="60%"
                 min-height="200"
               >
                 <v-sheet
                   v-for="n in 8"
                   :key="n"
-                  class="ma-3 pa-2"
+                  class="ma-3"
                 >
-                  <v-card text="Item" width="150" height="150"></v-card>
+                  <hotel-card 
+                    :title="'Hotel #' + n"
+                    :price="n * 1500"
+                    address="Moscow, Bolshaya Baumanskaya, 18"
+                    description="lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
+                    imageUrl="https://www.ahstatic.com/photos/a596_ho_00_p_2048x1536.jpg"
+                  />
                 </v-sheet>
               </v-sheet>
-
-              <v-sheet class="d-flex flex-column" width="50%">
-                <v-sheet class="d-flex">
-                  <v-textarea label="Comment" variant="outlined" class="ml-10 mr-10" width="400"></v-textarea>
-                </v-sheet>
-              </v-sheet>
+              
+              <comments-section :comments="comments"/>
             </v-sheet>
           </div>
-        <!-- </v-container> -->
         <v-card-text v-else v-text="text"></v-card-text>
       </v-tabs-window-item>
     </v-tabs-window>
@@ -78,14 +76,27 @@
 <script>
   import axios from 'axios'
   import { format } from 'date-fns'
+  import HotelCard from './hotel-card'
+  import CommentsSection from './comments-section'
 
   export default {
+    components: {
+      HotelCard,
+      CommentsSection
+    },
+
     data: () => ({
-      text: 'Здесь уже становится красиво!',
+      text: 'Soon',
       selectedDates: [],
       tab: 3,
       minDate: new Date(2024, 10, 5).toISOString(),
-      maxDate: new Date(2024, 10, 28).toISOString()
+      maxDate: new Date(2024, 10, 28).toISOString(),
+
+      comments: [
+        { id: 1, author: "Kate", text: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsumlorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsumlorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" },
+        { id: 2, author: "Max", text: "lorem ipsum lorem ipsum lorem ipsum lorem lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsumlorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" },
+        { id: 3, author: "Denis", text: "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum" }
+      ]
     }),
 
     methods: {
@@ -99,7 +110,6 @@
         }
       }, 
       formatDate(date) {
-        console.log(date)
         return format(new Date(date), 'dd.MM.yyyy');
       }
     }
