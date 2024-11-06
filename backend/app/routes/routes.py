@@ -1,7 +1,8 @@
 from fastapi import APIRouter
+from app.routes.handlers import cities_handler, create_trip
+
 
 router = APIRouter()
 
-@router.get("/")
-async def root():
-    return {"message": "Helsfhfhefejwlo World"}
+router.get("/cities")(cities_handler)
+router.post("/create_trip")(create_trip)
