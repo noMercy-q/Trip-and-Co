@@ -1,11 +1,12 @@
 <template>
-  <v-container class="d-flex flex-column justify-start align-center " fluid
+  <v-container class="d-flex flex-column justify-center align-center " fluid
                style="min-height: 100vh;">
 
     <v-img
         src="assets/logo_white.png"
         width="auto"
         max-width="150px"
+        max-height="100px"
         height="100px"
         alt="Logo"
 
