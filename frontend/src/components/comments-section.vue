@@ -10,11 +10,13 @@
       <div>{{ comment.text }}</div>
     </v-card>
   </v-sheet>
-  <v-textarea
-    label="Comment"
-    variant="outlined"
-    density="compact"
-  />
+  <v-sheet>
+    <v-textarea
+      placeholder="Add your comment"
+      variant="outlined"
+      density="comfort"
+    />
+  </v-sheet>
 </v-sheet>
 </template>
 

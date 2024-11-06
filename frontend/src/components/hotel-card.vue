@@ -1,21 +1,21 @@
 <template>
-<v-card width="400" height="400" class="rounded-xl" variant="outlined">
+<v-card width="300" height="300" class="rounded-xl" variant="outlined">
   <v-img
     cover
-    :src="imageUrl"
+    :src="hotel.imageUrl"
     class="align-end"
-    height="200"
+    height="150"
   >
-    <v-card-title>{{ title }}</v-card-title>
+    <v-card-title>{{ hotel.title }}</v-card-title>
   </v-img>
   <v-card-subtitle class="pt-4">
-    {{ title }}
+    {{ hotel.title }}
   </v-card-subtitle>
 
   <v-card-text>
-    <div>{{ title }}</div>
-    <div>{{ description }}</div>
-    <div>{{ address }}</div>
+    <div>{{ hotel.title }}</div>
+    <div>{{ hotel.description }}</div>
+    <div>{{ hotel.address }}</div>
   </v-card-text>
 
   <v-card-actions>
@@ -30,11 +30,7 @@ export default {
   name: "HotelCard",
   
   props: {
-    imageUrl: String,
-    title: String,
-    address: String,
-    description: String,
-    price: Number
+    hotel: Object
   }
 }
 </script>
