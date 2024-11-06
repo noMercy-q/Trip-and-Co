@@ -10,6 +10,7 @@
       </template>
 
       <v-app-bar-title>Trip&Co</v-app-bar-title>
+      <!-- <v-app-bar-icon src="@assets/logo_white.png"></v-app-bar-icon> -->
 
       <template v-slot:append>
         <v-btn icon="mdi-heart"></v-btn>
@@ -30,6 +31,7 @@ import { useTheme } from 'vuetify'
 export default {
   setup() {
     const theme = useTheme()
+    theme.global.name.value = 'dark'
 
     function toggleTheme() {
       theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
