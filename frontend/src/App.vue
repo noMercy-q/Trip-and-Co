@@ -18,6 +18,17 @@
       </template>
     </v-app-bar>
 
+    <v-navigation-drawer
+      v-model="showNavigationDrawer"
+    >
+      <v-list-item title="Your trips"></v-list-item>
+      <v-divider></v-divider>
+      <v-list-item link title="Trip 1"></v-list-item>
+      <v-list-item link title="Trip 2"></v-list-item>
+      <v-list-item link title="Trip 3"></v-list-item>
+      <v-btn>New trip</v-btn>
+    </v-navigation-drawer>
+
     <v-main>
       <router-view></router-view>
     </v-main>
