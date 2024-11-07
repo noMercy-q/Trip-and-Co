@@ -9,6 +9,12 @@ const routes = [
     component: MainPage
   },
   {
+    path: '/trips/:id',
+    name: 'TripDetail',
+    component: MainPage,
+    props: true,
+  },
+  {
     path: '/auth',
     name: 'Auth',
     component: AuthForm,
