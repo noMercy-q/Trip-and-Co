@@ -83,9 +83,9 @@ CREATE TABLE IF NOT EXISTS votes (
 CREATE TABLE IF NOT EXISTS comments (
     id SERIAL PRIMARY KEY,
     user_id UUID,
-    poll_option_id INT,
+    trip_item_id INT,
     content TEXT,
     created_at TIMESTAMPTZ,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (poll_option_id) REFERENCES trip_items(id)
+    FOREIGN KEY (trip_item_id) REFERENCES trip_items(id)
 );
