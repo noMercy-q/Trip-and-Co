@@ -45,6 +45,8 @@ class Trip(Base):
     end_date = Column(TIMESTAMP(timezone=True))
     created_at = Column(TIMESTAMP(timezone=True))
 
+    invite_token = Column(String)
+
 class TripItemsTypes(enum.Enum):
     hotel = "hotel"
     vehicle = "vehicle"

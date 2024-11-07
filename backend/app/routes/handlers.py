@@ -1,8 +1,9 @@
-from fastapi import Request
+from fastapi import Request, Query
 from app import db_service, schemas, aviasales_service, amadeus_service
 from fastapi import Depends
+import uuid
 from app import db_service, schemas, aviasales_service
-from app.routes.utils import get_current_user
+from app.routes.utils import get_current_user, generate_invite_token
 
 
 async def get_cities():
@@ -12,8 +13,17 @@ async def get_cities():
 # async def hotels_handler(trip: schemas.TripCreate):
 #     return await db_service.create_trip(trip)
 
-async def create_trip(trip: schemas.TripCreate):
+INVITE_TOKEN_LENGTH = 32
+
+async def create_trip(trip: schemas.TripCreate, user: schemas.TokenPayloadData = Depends(get_current_user)):
+
+    trip._invite_token = generate_invite_token(INVITE_TOKEN_LENGTH)
+    trip._created_by = uuid.UUID(user.user_id)
+
     return await db_service.create_trip(trip)
+#
+# async def join_trip(invite_token: str = Query(), user: schemas.TokenPayloadData = Depends(get_current_user)):
+#     get_trip_by_invite_token
 
 async def create_trip_item(trip_item: schemas.TripItemCreate):
     created_trip = db_service.create_trip_item(trip_item)
