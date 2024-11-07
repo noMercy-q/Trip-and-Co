@@ -22,15 +22,15 @@
         :value="n"
       >
         <div v-if="tab==1">
-          <date-tab />
+          <date-tab @next_tab="tab++" />
         </div>
 
         <div v-else-if="tab==2">
-          <accomodation-tab />
+          <accomodation-tab @next_tab="tab++" />
         </div>
 
         <div v-else-if="tab==3">
-          <views-tab />
+          <views-tab @next_tab="tab++" />
         </div>
 
         <div v-else-if="tab==4">
@@ -65,8 +65,7 @@
       tab: 4,
       minDate: new Date(2024, 10, 5).toISOString(),
       maxDate: new Date(2024, 10, 28).toISOString(),
-
-      cities: ['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']
+      cities: []
     }),
 
     computed: {

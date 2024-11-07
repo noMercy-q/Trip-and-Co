@@ -15,7 +15,7 @@
       <!-- <v-app-bar-icon src="@assets/logo_white.png"></v-app-bar-icon> -->
 
       <template v-slot:append>
-        <v-btn icon="mdi-heart"></v-btn>
+        <!-- <div>{{ username }}</div> -->
         <v-btn icon="mdi-dots-vertical" @click="toggleTheme"></v-btn>
       </template>
     </v-app-bar>
@@ -29,7 +29,14 @@
       <v-list-item link title="Trip 1"></v-list-item>
       <v-list-item link title="Trip 2"></v-list-item>
       <v-list-item link title="Trip 3"></v-list-item>
-      <v-btn @click="toggleCreateTripDialog">New trip</v-btn>
+      <v-btn
+        @click="toggleCreateTripDialog"
+        class="ma-5"
+        color="white"
+        variant="flat"
+      >
+        New trip
+      </v-btn>
     </v-navigation-drawer>
 
     <v-main>

@@ -17,15 +17,16 @@
     <v-btn
       class="text-none"
       color="white"
-      text="Suggest"
+      text="Submit"
       variant="flat"
+      @click="$emit('next_tab')"
     ></v-btn>
   </v-card-actions>
 </v-card> 
 </template>
 
 <script>
-  import axios from 'axios'
+  // import axios from 'axios'
   import { format } from 'date-fns'
 
   export default {
@@ -40,6 +41,10 @@
     methods: {
       formatDate(date) {
         return format(new Date(date), 'dd.MM.yyyy');
+      },
+
+      async saveDates() {
+
       }
     }
   }
