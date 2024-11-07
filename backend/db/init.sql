@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS trips (
     start_date TIMESTAMPTZ,
     end_date TIMESTAMPTZ,
     created_at TIMESTAMPTZ,
+    invite_token VARCHAR,
     FOREIGN KEY (created_by) REFERENCES users(id),
     FOREIGN KEY (origin_city_id) REFERENCES cities(city_id),
     FOREIGN KEY (dest_city_id) REFERENCES cities(city_id)

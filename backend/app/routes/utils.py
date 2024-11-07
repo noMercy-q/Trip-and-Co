@@ -1,4 +1,6 @@
 import os
+import secrets
+import string
 from datetime import timedelta, datetime
 from typing import Optional
 
@@ -38,3 +40,8 @@ def get_current_user(auth: HTTPAuthorizationCredentials = Depends(security)) -> 
         raise HTTPException(
             status_code=HTTP_403_FORBIDDEN, detail="Invalid or expired token"
         )
+
+def generate_invite_token(length):
+    characters = string.ascii_letters + string.digits
+    token = ''.join(secrets.choice(characters) for _ in range(length))
+    return token
