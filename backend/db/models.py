@@ -3,7 +3,7 @@ import enum
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, UUID, Enum, JSON, DECIMAL
+from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, UUID, Enum, JSON, DECIMAL, TIMESTAMP
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -41,9 +41,9 @@ class Trip(Base):
     origin_city_id = Column(String, ForeignKey('cities.city_id'))
     dest_city_id = Column(String, ForeignKey('cities.city_id'))
     created_by = Column(UUID, ForeignKey('users.id'))
-    start_date = Column(DateTime)
-    end_date = Column(DateTime)
-    created_at = Column(DateTime)
+    start_date = Column(TIMESTAMP(timezone=True))
+    end_date = Column(TIMESTAMP(timezone=True))
+    created_at = Column(TIMESTAMP(timezone=True))
 
 class TripItemsTypes(enum.Enum):
     hotel = "hotel"

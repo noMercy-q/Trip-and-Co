@@ -2,8 +2,8 @@
 from api_clients.amadeus_client import AmadeusClient
 from db.models import Trip, City, TripItem, TripItemsTypes
 
-from backend.app import schemas
-from backend.db.client import PostgresClient
+from app import schemas
+from db.client import PostgresClient
 
 
 class AmadeusService:
@@ -11,7 +11,7 @@ class AmadeusService:
         self.client = amadeus_client
         self.db_client = db_client
 
-    async def parse_plains_data(self,trip_item, airport_code: str = "NYC"):
+    async def parse_plains_data(self,trip_id: int, airport_code: str = "NYC"):
         hotels = await self.client.get_best_hotels(airport_code)
         len_hotels = max(10, len(hotels))
         for hotel in hotels[len_hotels]:
