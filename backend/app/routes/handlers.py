@@ -18,10 +18,14 @@ async def get_cities():
 INVITE_TOKEN_LENGTH = 32
 
 async def create_trip(trip: schemas.TripCreate, user: schemas.TokenPayloadData = Depends(get_current_user)):
+    user_id = uuid.UUID(user.user_id)
 
     trip._invite_token = generate_invite_token(INVITE_TOKEN_LENGTH)
-    trip._created_by = uuid.UUID(user.user_id)
+    trip._created_by = user_id
     created_trip = await db_service.create_trip(trip)
+
+    await db_service.add_participant(user_id, created_trip.id)
+
     await amadeus_service.get_hotels(created_trip.id, created_trip.dest_city_id)
     return created_trip
 #
@@ -47,6 +51,7 @@ async def join_trip(invite_token: str = Query(), user: schemas.TokenPayloadData 
 async def get_trips(
         trip_id: int = Query(None),
         invite_token: str = Query(None),
+        participant: bool = Query(None),
         user: schemas.TokenPayloadData = Depends(get_current_user)):
 
     filters = dict()
@@ -58,6 +63,12 @@ async def get_trips(
         filters['invite_token'] = invite_token
 
     trips = await db_service.get_trips(**filters)
+
+    if participant:
+        user_participants = await db_service.get_user_participants(uuid.UUID(user.user_id))
+        print("user_part in ", user_participants)
+        print("all trips", trips)
+        trips = [trip for trip in trips if trip.id in user_participants]
 
     return trips
 

@@ -14,7 +14,6 @@
       <!-- <v-app-bar-icon src="@assets/logo_white.png"></v-app-bar-icon> -->
 
 
-
       <template v-slot:append>
         <!-- <div>{{ username }}</div> -->
         <InviteButton></InviteButton>
@@ -28,11 +27,17 @@
     <v-navigation-drawer
         v-model="showNavigationDrawer"
     >
+<!--      // <v-sheet v-for="comment in comments" :key="comment.id">-->
       <v-list-item title="Your trips"></v-list-item>
       <v-divider></v-divider>
-      <v-list-item link title="Trip 1"></v-list-item>
-      <v-list-item link title="Trip 2"></v-list-item>
-      <v-list-item link title="Trip 3"></v-list-item>
+
+      <span v-for="trip in userTrips" :key="trip.id">
+         <v-list-item link :title="trip.name" @click="this.$router.push(`/trips/${trip.id}`)"></v-list-item>
+      </span>
+
+<!--      <v-list-item link title="Trip 1"></v-list-item>-->
+<!--      <v-list-item link title="Trip 2"></v-list-item>-->
+<!--      <v-list-item link title="Trip 3"></v-list-item>-->
       <v-btn
           @click="toggleCreateTripDialog"
           class="ma-5"
@@ -57,6 +62,8 @@
 import {useTheme} from 'vuetify'
 import CreateTrip from "@/components/create-trip.vue";
 import InviteButton from "@/components/invite-button.vue";
+import apiClient from "@/api/axios";
+
 export default {
   components: {
     CreateTrip,
@@ -80,7 +87,11 @@ export default {
     return {
       showNavigationDrawer: false,
       showCreateTripDialog: false,
+      userTrips: [],
     }
+  },
+  created() {
+    this.loadUserTrips();
   },
 
   methods: {
@@ -89,6 +100,21 @@ export default {
     },
     toggleCreateTripDialog() {
       this.showCreateTripDialog = !this.showCreateTripDialog
+    },
+    async loadUserTrips() {
+
+      try {
+        const response = await apiClient.get('/trips', {
+          params: {
+            participant: true,
+          }
+        })
+
+        this.userTrips = response.data
+
+      } catch (e) {
+        console.log("failed to get user trips", e)
+      }
     }
   }
 }

@@ -77,6 +77,17 @@ class PostgresService:
         )
         return await self.client.create_record(new_trip)
 
+    async def get_user_participants(self, user_id: uuid.UUID):
+        filter = {
+            "user_id": user_id,
+        }
+        participants: list[TripParticipant] | None = await self.client.select_by_filter(TripParticipant, filter)
+
+        if not participants:
+            return []
+
+        return [part.trip_id for part in participants]
+
     async def get_trips(self, **kwargs):
         trips: list[Trip] | None = await self.client.select_by_filter(Trip, kwargs)
 
