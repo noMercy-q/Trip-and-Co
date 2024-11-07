@@ -65,7 +65,7 @@ class PostgresService:
 
     async def create_vote(self, vote: schemas.Vote, user_id: str):
         new_vote = Vote(
-            user_id="38171859-980f-438b-b220-be0e4bc9d631",
+            user_id=user_id,
             trip_item_id=vote.trip_item_id,
             created_at=datetime.utcnow()
         )

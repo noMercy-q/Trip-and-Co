@@ -22,5 +22,5 @@ async def trip_items_handler():
 async def get_tickets(trip_id: int):
     return await aviasales_service.parse_tickets(trip_id)
 
-async def create_vote(vote: schemas.Vote, user = "38171859-980f-438b-b220-be0e4bc9d631"):
-    return await db_service.create_vote(vote, user)
+async def create_vote(vote: schemas.Vote, user: schemas.TokenPayloadData = Depends(get_current_user)):
+    return await db_service.create_vote(vote, user.user_id)
