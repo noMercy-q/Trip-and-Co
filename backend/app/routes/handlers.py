@@ -1,6 +1,8 @@
 from fastapi import Request, Query
+from starlette.status import HTTP_404_NOT_FOUND
+
 from app import db_service, schemas, aviasales_service, amadeus_service
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 import uuid
 from app import db_service, schemas, aviasales_service
 from app.routes.utils import get_current_user, generate_invite_token
@@ -23,8 +25,41 @@ async def create_trip(trip: schemas.TripCreate, user: schemas.TokenPayloadData =
     await amadeus_service.get_hotels(created_trip.id, created_trip.dest_city_id)
     return created_trip
 #
-# async def join_trip(invite_token: str = Query(), user: schemas.TokenPayloadData = Depends(get_current_user)):
-#     get_trip_by_invite_token
+async def join_trip(invite_token: str = Query(), user: schemas.TokenPayloadData = Depends(get_current_user)):
+    trips = await db_service.get_trips(invite_token=invite_token)
+
+    if len(trips) < 1:
+        return HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail="Trip not found",
+        )
+
+    current_trip = trips[0]
+
+    user_id = uuid.UUID(user.user_id)
+
+    await db_service.add_participant(user_id, current_trip.id)
+
+    return {
+        "status": "success"
+    }
+
+async def get_trips(
+        trip_id: int = Query(None),
+        invite_token: str = Query(None),
+        user: schemas.TokenPayloadData = Depends(get_current_user)):
+
+    filters = dict()
+
+    if trip_id:
+        filters['id'] = trip_id
+
+    if invite_token:
+        filters['invite_token'] = invite_token
+
+    trips = await db_service.get_trips(**filters)
+
+    return trips
 
 async def create_trip_item(trip_item: schemas.TripItemCreate):
     return await  db_service.create_trip_item(trip_item)

@@ -90,3 +90,12 @@ CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (trip_item_id) REFERENCES trip_items(id)
 );
+
+CREATE TABLE IF NOT EXISTS trip_participants (
+    id SERIAL PRIMARY KEY,
+    user_id UUID,
+    trip_id INT,
+    joined_at TIMESTAMPTZ default now(),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (trip_id) REFERENCES trips(id)
+);

@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import MainPage from '../components/main-page'
 import AuthForm from "@/components/auth-form.vue";
 import store from "@/store";
+import JoinToTrip from "@/components/join-to-trip.vue";
 // import store from "@/store";
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     name: 'Auth',
     component: AuthForm,
   },
+  {
+    path: '/join/:invite_token',
+    name: 'JoinToTrip',
+    component: JoinToTrip,
+  }
 ]
 
 const router = createRouter({

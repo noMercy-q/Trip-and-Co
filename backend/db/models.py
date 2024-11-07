@@ -47,6 +47,13 @@ class Trip(Base):
 
     invite_token = Column(String)
 
+class TripParticipant(Base):
+    __tablename__ = 'trip_participants'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(UUID, ForeignKey('users.id'))
+    trip_id = Column(Integer, ForeignKey('trips.id'))
+    joined_at = Column(TIMESTAMP(timezone=True), default=datetime.now())
+
 class TripItemsTypes(enum.Enum):
     hotel = "hotel"
     vehicle = "vehicle"

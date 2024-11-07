@@ -77,23 +77,30 @@ class PostgresService:
         )
         return await self.client.create_record(new_trip)
 
-    # async def get_trips(self, **kwargs):
-    #     trips: list[Trip] | None = await self.client.select_by_filter(Trip, kwargs)
-    #
-    #     if not trips:
-    #         return []
-    #
-    #     return [schemas.Trip(
-    #         name=trip.name,
-    #         description=trip.description,
-    #         origin_city_id=trip.origin_city_id,
-    #         dest_city_id=trip.dest_city_id,
-    #         created_by=trip.created_by,
-    #         start_date=trip.start_date,
-    #         end_date=trip.end_date,
-    #         created_at=datetime.utcnow(),
-    #         invite_token=trip.invite_token,
-    #     ) for trip in trips]
+    async def get_trips(self, **kwargs):
+        trips: list[Trip] | None = await self.client.select_by_filter(Trip, kwargs)
+
+        if not trips:
+            return []
+
+        return [schemas.Trip(
+            id=trip.id,
+            name=trip.name,
+            description=trip.description,
+            origin_city_id=trip.origin_city_id,
+            dest_city_id=trip.dest_city_id,
+            created_by=trip.created_by,
+            start_date=trip.start_date,
+            end_date=trip.end_date,
+            created_at=trip.created_at,
+            invite_token=trip.invite_token,
+        ) for trip in trips]
+
+    async def add_participant(self, user_id: uuid.UUID, trip_id: int):
+        await self.client.create_record(TripParticipant(
+            user_id=user_id,
+            trip_id=trip_id,
+        ))
 
     async def get_votes(self, trip_item_id):
         filters = {"trip_item_id": trip_item_id}

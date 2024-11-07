@@ -1,8 +1,10 @@
 import axios from 'axios';
 import store from '@/store';
 
+export const backendBaseURL = "http://localhost:8000"
+
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: backendBaseURL,
   headers: {
     'Content-Type': 'application/json',
   },

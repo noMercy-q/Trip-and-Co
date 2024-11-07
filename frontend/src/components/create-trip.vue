@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import apiClient from '../api/axios';
+import apiClient from "@/api/axios";
 
 export default {
   data() {

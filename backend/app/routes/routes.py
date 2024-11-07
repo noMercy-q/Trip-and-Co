@@ -12,6 +12,8 @@ router.include_router(auth_router)
 
 router.get("/cities")(get_cities)
 router.post("/create_trip")(create_trip)
+router.post("/join_trip")(join_trip)
+router.get("/trips")(get_trips)
 @router.get("/views/")
 async def get_trip_items(trip_id: Optional[int] = None):
     if trip_id is None:

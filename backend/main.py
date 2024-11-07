@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 
-from app.routes.middlewares import JWTMiddleware
+# from app.routes.middlewares import JWTMiddleware
 from app.routes.routes import router
 from app import db_client
 
