@@ -176,7 +176,7 @@
     },
 
     created() {
-      this.getViews()
+      // this.getViews() 
     },
 
     methods: {

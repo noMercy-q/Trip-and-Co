@@ -88,7 +88,7 @@ class PostgresService:
             start_date=trip.start_date,
             end_date=trip.end_date,
             created_at=datetime.utcnow(),
-            invite_token=trip.invite_token,
+            invite_token=trip._invite_token,
         )
         return await self.client.create_record(new_trip)
 

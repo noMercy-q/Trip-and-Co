@@ -192,7 +192,7 @@
     }),
 
     created() {
-      this.getHotels()
+      // this.getHotels()
     },
 
     methods: {

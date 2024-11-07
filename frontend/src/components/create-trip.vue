@@ -6,43 +6,47 @@
 
         <!-- Название путешествия -->
         <v-text-field
-            label="Trip Name"
-            density="compact"
-            persistent-placeholder
-            v-model="tripName"
-            :rules="rules.tripNameRules"
-            placeholder="Summer Adventure"
-            prepend-inner-icon="mdi-map"
-            variant="outlined"
-            class="mb-4"
+          :rules="rules.tripNameRules"
+          label="Trip Name"
+          density="compact"
+          persistent-placeholder
+          v-model="tripName"
+          placeholder="Summer Adventure"
+          prepend-inner-icon="mdi-map"
+          variant="outlined"
+          class="mb-4"
         ></v-text-field>
 
         <!-- Города отправления и прибытия на одной строке -->
         <v-row>
           <v-col cols="6">
             <v-autocomplete
-                :items="cityOptions"
-                label="Departure City"
-                density="compact"
-                persistent-placeholder
-                v-model="departureCity"
-                :rules="rules.cityRules"
-                placeholder="New York"
-                prepend-inner-icon="mdi-city"
-                variant="outlined"
+              :items="cities"
+              :rules="rules.cityRules"
+              item-title="name"
+              item-value="code"
+              label="Departure City"
+              density="compact"
+              persistent-placeholder
+              v-model="departureCityCode"
+              placeholder="New York"
+              prepend-inner-icon="mdi-city"
+              variant="outlined"
             ></v-autocomplete>
           </v-col>
           <v-col cols="6">
             <v-autocomplete
-                :items="cityOptions"
-                label="Destination City"
-                v-model="destinationCity"
-                density="compact"
-                persistent-placeholder
-                :rules="rules.cityRules"
-                placeholder="Los Angeles"
-                prepend-inner-icon="mdi-city-variant"
-                variant="outlined"
+              :items="cities"
+              :rules="rules.cityRules"
+              item-title="name"
+              item-value="code"
+              label="Destination City"
+              v-model="destinationCityCode"
+              density="compact"
+              persistent-placeholder
+              placeholder="Los Angeles"
+              prepend-inner-icon="mdi-city-variant"
+              variant="outlined"
             ></v-autocomplete>
           </v-col>
         </v-row>
@@ -51,26 +55,26 @@
         <v-row>
           <v-col cols="6">
             <v-text-field
-                label="Departure Date"
-                v-model="startDate"
-                density="compact"
-                persistent-placeholder
-                :rules="rules.dateRules"
-                type="date"
-                prepend-inner-icon="mdi-calendar"
-                variant="outlined"
+              label="Departure Date"
+              v-model="startDate"
+              density="compact"
+              persistent-placeholder
+              :rules="rules.dateRules"
+              type="date"
+              prepend-inner-icon="mdi-calendar"
+              variant="outlined"
             ></v-text-field>
           </v-col>
           <v-col cols="6">
             <v-text-field
-                label="Return Date"
-                density="compact"
-                persistent-placeholder
-                v-model="endDate"
-                :rules="rules.dateRules"
-                type="date"
-                prepend-inner-icon="mdi-calendar-end"
-                variant="outlined"
+              label="Return Date"
+              density="compact"
+              persistent-placeholder
+              v-model="endDate"
+              :rules="rules.dateRules"
+              type="date"
+              prepend-inner-icon="mdi-calendar-end"
+              variant="outlined"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -80,16 +84,22 @@
 
     <v-card-actions>
       <v-btn class="text-none" density="comfortable" variant="outlined" color="white" @click="$emit('close')">Cancel</v-btn>
-      <v-btn class="text-none ma-2" density="comfortable" variant="flat" color="white" @click="submitTrip"
-             :loading="isSubmitting">Create
-        Trip
+      <v-btn
+        :loading="isSubmitting"
+        class="text-none ma-2"
+        density="comfortable"
+        variant="flat"
+        color="white"
+        @click="submitTrip"
+      >
+        Create Trip
       </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import axios from "axios";
+import apiClient from '../api/axios';
 
 export default {
   data() {
@@ -101,8 +111,8 @@ export default {
     return {
       tripName: '',
       cities: [],
-      departureCity: '',
-      destinationCity: '',
+      departureCityCode: '',
+      destinationCityCode: '',
       startDate: today.toISOString().slice(0, 10),
       endDate: nextWeek.toISOString().slice(0, 10),
       isSubmitting: false,
@@ -123,12 +133,11 @@ export default {
   },
   methods: {
     async fetchCities() {
-      const endpoint = "http://localhost:8000/cities"
-
       try {
-        const response = await axios.get(endpoint)
+        const response = await apiClient.get('cities')
 
         this.cities = response.data || [];
+        console.log(this.cities)
 
       } catch (e) {
         console.log("error to fetch cities: ", e)
@@ -140,20 +149,18 @@ export default {
       this.isSubmitting = true;
 
       try {
-        // Отправка данных формы
-        const endpoint = "http://localhost:8000/create_trip"
-        const response = await axios.post(endpoint, {
+        const { data } = await apiClient.post('create_trip', {
           name: this.tripName,
-          departureCity: this.departureCity,
-          destinationCity: this.destinationCity,
-          startDate: this.startDate,
-          endDate: this.endDate,
+          origin_city_id: this.departureCityCode,
+          dest_city_id: this.destinationCityCode,
+          start_date: this.startDate,
+          end_date: this.endDate,
         });
 
-        console.log("Trip created:", response.data);
 
-        // Закрыть диалоговое окно после успешного создания
         this.$emit('close');
+        this.$router.push({ name: 'TripDetail', params: { id: data.id } });
+
       } catch (error) {
         console.error("Error creating trip:", error);
       } finally {
