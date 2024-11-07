@@ -55,3 +55,20 @@ app/routes/ - для маршрутов и хендлеров
 
 app/services/ - "сервисы" для реализации бизнес логики (которые могут использовать внешних клиентов), например для avia 
 это сервис для обработки данных в нужный формат, чтобы отдать на фронт
+
+
+### Создание тестовых данных 
+/create_trip
+```bash
+curl -i http://0.0.0.0:8000/create_trip -d '{"name": "test-trip", "origin_city_id": "MOW", "dest_city_id": "DXB", "created_by": "38171859-980f-438b-b220-be0e4bc9d631", "start_date": "2024-11-30", "end_date": "2024-12-25"}' -X POST -H "Content-Type: application/json"
+```
+
+/create_view
+```bash
+curl -i http://0.0.0.0:8000/create_view  -X POST -H "Content-Type: application/json" -d '{"name": "test-trip-item", "trip_id": "1", "type": "hotel"}'
+```
+
+/create_vote
+```bash
+curl -i http://0.0.0.0:8000/votes  -X POST -H "Content-Type: application/json" -d '{"trip_item_id": "1", "user": "38171859-980f-438b-b220-be0e4bc9d631"}'
+```

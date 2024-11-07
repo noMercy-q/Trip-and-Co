@@ -4,10 +4,8 @@ from datetime import datetime
 from app import schemas
 
 from db.client import PostgresClient
-from db.models import Trip, City, TripItem
+from db.models import Trip, City, TripItem, Vote
 from sqlalchemy import select
-
-from backend.db.models import TripItemsTypes
 
 
 log = logging.getLogger(__name__)
@@ -64,3 +62,12 @@ class PostgresService:
             created_at=datetime.utcnow()
         )
         return await self.client.create_record(new_trip)
+
+    async def create_vote(self, vote: schemas.Vote, user_id: str):
+        new_vote = Vote(
+            user_id="38171859-980f-438b-b220-be0e4bc9d631",
+            trip_item_id=vote.trip_item_id,
+            created_at=datetime.utcnow()
+        )
+
+        return await self.client.create_record(new_vote)
