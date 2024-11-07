@@ -5,7 +5,7 @@ from typing import Optional
 from app import schemas
 
 from db.client import PostgresClient
-from db.models import Trip, City
+from db.models import Trip, City, TripItem
 
 
 class PostgresService:
@@ -23,8 +23,21 @@ class PostgresService:
                     code=city.city_id,
                 ),
             )
-
         return data
+
+    async def create_trip_item(self, trip_item: schemas.TripItemCreate):
+        new_trip_item = TripItem(
+            name=trip_item.name,
+            type=trip_item.type,
+            description= trip_item.description,
+            details=trip_item.details,
+            cost=trip_item.cost,
+            link_url=trip_item.link_url,
+            image_url=trip_item.image_url
+        )
+        return await self.client.create_record(new_trip_item)
+    async def get_trip_items(self):
+        return await self.client.select_all(TripItem)
 
     async def create_trip(self, trip: schemas.TripCreate):
         new_trip = Trip(

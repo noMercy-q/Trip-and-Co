@@ -1,4 +1,6 @@
-from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime
+import enum
+
+from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, Enum, JSON, DECIMAL
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -39,3 +41,20 @@ class Trip(Base):
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     created_at = Column(DateTime)
+
+class TripItemsTypes(enum.Enum):
+    hotels = "hotels"
+    vehicle = "vehicle"
+    attraction = "attraction"
+class TripItem(Base):
+    __tablename__ = "trip_items"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(Enum(TripItemsTypes, name="tripitemstypes"), nullable=False)
+    name = Column(String, nullable=True)
+    description = Column(Text, nullable=True)
+    details = Column(JSON, nullable=True)
+    cost = Column(DECIMAL, nullable=True)
+    link_url = Column(Text, nullable=True)
+    image_url = Column(Text, nullable=True)
+

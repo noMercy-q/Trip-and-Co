@@ -65,34 +65,18 @@ CREATE TABLE IF NOT EXISTS trip_items (
     name VARCHAR,
     description TEXT,
     details JSON,
-    cost DECIMAL
-);
-
-CREATE TABLE IF NOT EXISTS poll (
-    id SERIAL PRIMARY KEY,
-    type TripItemsTypes,
-    trip_id INT,
-    FOREIGN KEY (trip_id) REFERENCES trips(id)
-);
-
-CREATE TABLE IF NOT EXISTS poll_options (
-    id SERIAL PRIMARY KEY,
-    poll_id INT,
-    trip_item_id INT,
-    created_at TIMESTAMPTZ,
-    created_by INT,
-    FOREIGN KEY (poll_id) REFERENCES poll(id),
-    FOREIGN KEY (trip_item_id) REFERENCES trip_items(id),
-    FOREIGN KEY (created_by) REFERENCES users(id)
+    cost DECIMAL,
+    image_url TEXT,
+    link_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS votes (
     id SERIAL PRIMARY KEY,
     user_id INT,
-    option_id INT,
+    trip_item_id INT,
     created_at TIMESTAMPTZ,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (option_id) REFERENCES poll_options(id)
+    FOREIGN KEY (trip_item_id) REFERENCES trip_items(id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
@@ -102,5 +86,5 @@ CREATE TABLE IF NOT EXISTS comments (
     content TEXT,
     created_at TIMESTAMPTZ,
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (poll_option_id) REFERENCES poll_options(id)
+    FOREIGN KEY (poll_option_id) REFERENCES trip_items(id)
 );

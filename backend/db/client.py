@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 class PostgresClient:
-    def __init__(self, database_url: str = "postgresql+asyncpg://postgres:hac_db@localhost:5432/hac_db"):
+    def __init__(self, database_url: str = "postgresql+asyncpg://postgres:hac_db@localhost:5433/hac_db"):
         self.engine = create_async_engine(database_url, echo=True)
         self.metadata = MetaData()
         self.async_session = sessionmaker(
@@ -36,6 +36,7 @@ class PostgresClient:
                 except Exception as e:
                     log.error(f"Failed to execute query: {e}")
                     return []
+
 
     async def create_record(self, table_record: Base):
         async with self.async_session() as session:
