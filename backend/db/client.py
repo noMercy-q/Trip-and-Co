@@ -3,6 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
+from sqlalchemy.sql.expression import func
 import logging
 import asyncio
 
@@ -39,14 +40,21 @@ class PostgresClient:
                     log.error(f"Failed to execute query: {e}")
                     return []
 
-    async def select_by_filter(self, table: Base, filters):
+    async def select_by_filter(self, table: Base, filters, count_only=False):
         async with self.async_session() as session:
             try:
-                stmt = select(table)
+                if count_only:
+                    stmt = select(func.count()).select_from(table)
+                else:
+                    stmt = select(table)
                 for attr, value in filters.items():
                     stmt = stmt.filter(getattr(table, attr) == value)
                 result = await session.execute(stmt)
-                return result.scalars().all()
+                if count_only:
+                    return result.scalar()
+                else:
+                    return result.scalars().all()
+
             except SQLAlchemyError as e:
                 log.error(f"Failed to select by filter: {e}")
                 return None
@@ -69,9 +77,10 @@ class PostgresClient:
 #     db_client = PostgresClient()
 #     await db_client.connect()
 #
-#     cities = await db_client.select_all()
-#     for city in cities:
-#         print(city.city_id, city.city_name)
+#     from db.models import Vote
+#     filters = {"trip_item_id": 1}
+#     c = await db_client.select_by_filter(Vote, filters, count_only=True)
+#     print(c)
 #
 # if __name__ == "__main__":
 #     asyncio.run(main())

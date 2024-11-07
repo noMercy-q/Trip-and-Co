@@ -4,9 +4,9 @@
     <v-sheet
       class="d-flex flex-row ma-10"
     >
-      <v-sheet class="d-flex flex-column" width="60%">
+      <v-sheet class="d-flex flex-column mr-10" width="60%">
         <v-sheet
-          class="d-flex align-content-start flex-wrap"
+          class="d-flex justify-space-between flex-wrap"
           min-height="200"
         >
           <v-sheet
@@ -29,7 +29,7 @@
               variant="flat"
               color="white"
               text="Submit"
-              @click="tab++"
+              @click="$emit('next_tab')"
             />
           </v-card-actions>
         </v-sheet>  
@@ -59,12 +59,26 @@
       <v-divider class="mt-2"></v-divider>
 
       <v-card-text>
+        <v-text-field
+          v-model="newHotel.name"
+          class="mb-2"
+          variant="outlined"
+          label="Title"
+        />
         <v-textarea
+          v-model="newHotel.description"
           :counter="300"
           class="mb-2"
           rows="2"
           variant="outlined"
+          label="Description"
           persistent-counter
+        />
+        <v-text-field
+          v-model="newHotel.imageUrl"
+          class="mb-2"
+          variant="outlined"
+          label="Title"
         />
       </v-card-text>
 
@@ -81,7 +95,7 @@
           color="white"
           text="Suggest"
           variant="flat"
-          @click="showDialog = false"
+          @click="createHotel"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -90,7 +104,7 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import apiClient from '../../api/axios'
   import HotelCard from '../hotel-card'
   import CommentsSection from '../comments-section'
 
@@ -103,6 +117,7 @@
 
     data: () => ({
       showDialog: false,
+      newHotel: {},
       hotels: [
         {
           id: 1,
@@ -182,7 +197,37 @@
 
     methods: {
       async getHotels() {
+        try {
+          const { data } = await apiClient.get("/hotels", { params: { trip_id: this.$route.params.id } });
 
+          console.log(data)
+          this.hotels = data
+          this.$emit('close');
+        } catch (error) {
+          console.error("Error getting hotels:", error);
+        } finally {
+          this.isSubmitting = false;
+        }
+      },
+
+      async createHotel() {
+        try {
+          await apiClient.post("create_view", {
+            trip_id: this.$route.params.id,
+            type: 'hotel',
+            name: this.newHotel.name,
+            description: this.newHotel.description,
+            image_url: this.newHotel.imageUrl
+          });
+
+          this.hotels.push(this.newHotel)
+          this.newHotel = {}
+
+        } catch (error) {
+          console.error("Error creating hotel:", error);
+        } finally {
+          this.showDialog = false;
+        }
       }
     }
   }

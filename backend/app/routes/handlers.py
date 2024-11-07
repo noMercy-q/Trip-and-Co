@@ -27,5 +27,14 @@ async def hotel_handler(trip_id: int):
 async def get_tickets(trip_id: int):
     return await aviasales_service.parse_tickets(trip_id)
 
+async def get_votes(trip_item_id: int):
+    return await db_service.get_votes(trip_item_id)
+
 async def create_vote(vote: schemas.Vote, user: schemas.TokenPayloadData = Depends(get_current_user)):
     return await db_service.create_vote(vote, user.user_id)
+
+async def get_comments(trip_item_id: int):
+    return await db_service.get_comments(trip_item_id)
+
+async def create_comment(trip_item_id: schemas.Comment,  user: schemas.TokenPayloadData = Depends(get_current_user)):
+    return await db_service.create_comment(trip_item_id, user.user_id)

@@ -69,3 +69,12 @@ class Vote(Base):
     user_id = Column(UUID, ForeignKey('users.id'))
     trip_item_id = Column(Integer, ForeignKey('trip_items.id'))
     created_at = Column(DateTime)
+
+class Comment(Base):
+    __tablename__ = "comments"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(UUID, ForeignKey('users.id'))
+    trip_item_id = Column(Integer, ForeignKey('trip_items.id'))
+    content = Column(Text)
+    created_at = Column(DateTime)

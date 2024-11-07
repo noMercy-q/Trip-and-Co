@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto rounded-xl" width="75%">
+  <v-card class="mx-auto rounded-xl" width="30%">
     <v-card-title class="text-h5 text-center">Create a New Trip</v-card-title>
     <v-card-text>
       <v-form ref="tripForm">
@@ -79,8 +79,8 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn class="text-none" density="comfortable" color="grey" @click="$emit('close')">Cancel</v-btn>
-      <v-btn class="text-none" density="comfortable" variant="outlined" color="primary" @click="submitTrip"
+      <v-btn class="text-none" density="comfortable" variant="outlined" color="white" @click="$emit('close')">Cancel</v-btn>
+      <v-btn class="text-none ma-2" density="comfortable" variant="flat" color="white" @click="submitTrip"
              :loading="isSubmitting">Create
         Trip
       </v-btn>
@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     cityOptions() {
-      return this.cities.map(city => city.name);
+      return this.cities.map(city => city.name).sort();
     },
   },
   mounted() {
@@ -141,7 +141,8 @@ export default {
 
       try {
         // Отправка данных формы
-        const response = await axios.post("/trips", {
+        const endpoint = "http://localhost:8000/create_trip"
+        const response = await axios.post(endpoint, {
           name: this.tripName,
           departureCity: this.departureCity,
           destinationCity: this.destinationCity,

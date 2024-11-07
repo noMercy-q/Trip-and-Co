@@ -18,8 +18,8 @@
     <div>{{ hotel.address }}</div>
   </v-card-text>
 
-  <v-card-actions>
-    <v-btn color="orange" text="Upvote" />
+  <v-card-actions class="d-flex justify-end ma-2">
+    <v-btn color="white" text="Upvote" />
   </v-card-actions>
 </v-card>
 </template>
