@@ -1,6 +1,10 @@
 import enum
 
 from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, Enum, JSON, DECIMAL
+import uuid
+from datetime import datetime
+
+from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, UUID
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -23,11 +27,11 @@ class Airport(Base):
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(UUID, primary_key=True, default=uuid.uuid4)
     name = Column(String)
     email = Column(String, unique=True)
     password_hash = Column(String)
-    created_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.now())
 
 class Trip(Base):
     __tablename__ = 'trips'
@@ -37,7 +41,7 @@ class Trip(Base):
     description = Column(Text)
     origin_city_id = Column(String, ForeignKey('cities.city_id'))
     dest_city_id = Column(String, ForeignKey('cities.city_id'))
-    created_by = Column(Integer, ForeignKey('users.id'))
+    created_by = Column(UUID, ForeignKey('users.id'))
     start_date = Column(DateTime)
     end_date = Column(DateTime)
     created_at = Column(DateTime)

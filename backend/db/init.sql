@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS airports (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
+    id uuid PRIMARY KEY default gen_random_uuid(),
     name VARCHAR,
-    email VARCHAR,
+    email VARCHAR unique,
     password_hash VARCHAR,
-    created_at TIMESTAMPTZ
+    created_at TIMESTAMPTZ default now()
 );
 
 COPY cities FROM '/docker-entrypoint-initdb.d/data/cities.csv' DELIMITER ',' CSV HEADER;
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS trips (
     description TEXT,
     origin_city_id VARCHAR,
     dest_city_id VARCHAR,
-    created_by INT,
+    created_by UUID,
     start_date TIMESTAMPTZ,
     end_date TIMESTAMPTZ,
     created_at TIMESTAMPTZ,
@@ -49,7 +49,7 @@ CREATE TYPE UserRole AS ENUM ('owner', 'user');
 CREATE TABLE IF NOT EXISTS trip_participants (
     id SERIAL PRIMARY KEY,
     trip_id INT,
-    user_id INT,
+    user_id UUID,
     role UserRole,
     joined_at TIMESTAMPTZ,
     FOREIGN KEY (trip_id) REFERENCES trips(id),
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS trip_items (
 
 CREATE TABLE IF NOT EXISTS votes (
     id SERIAL PRIMARY KEY,
-    user_id INT,
+    user_id UUID,
     trip_item_id INT,
     created_at TIMESTAMPTZ,
     FOREIGN KEY (user_id) REFERENCES users(id),
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS votes (
 
 CREATE TABLE IF NOT EXISTS comments (
     id SERIAL PRIMARY KEY,
-    user_id INT,
+    user_id UUID,
     poll_option_id INT,
     content TEXT,
     created_at TIMESTAMPTZ,
