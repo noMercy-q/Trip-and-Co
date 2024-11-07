@@ -5,7 +5,9 @@ import uvicorn
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 
+from app.routes.middlewares import JWTMiddleware
 from app.routes.routes import router
 from app import db_client
 
@@ -18,6 +20,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
+
 app = FastAPI(lifespan=lifespan)
 app.include_router(router)
 
@@ -27,6 +30,10 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+app.add_middleware(
+    JWTMiddleware,
 )
 
 
