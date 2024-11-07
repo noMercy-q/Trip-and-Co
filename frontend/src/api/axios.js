@@ -1,19 +1,19 @@
 import axios from 'axios';
-import store from '@/store'; // подключите Vuex, если храните там токен
+import store from '@/store';
 
 const apiClient = axios.create({
-  baseURL: 'https://your-backend-url.com',
+  baseURL: 'http://localhost:8000',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Добавьте интерсептор для автоматического добавления токена
 apiClient.interceptors.request.use(config => {
-  const token = store.state.auth.token; // предположим, токен хранится в auth модуля
+  const token = store.state.auth.token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  console.log('token: ', token)
   return config;
 });
 

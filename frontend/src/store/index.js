@@ -3,7 +3,7 @@ import {createStore} from 'vuex'
 export default createStore({
     state: {
         auth: {
-            token: null,
+            token: localStorage.getItem('token'),
         }
     },
     getters: {
@@ -12,9 +12,13 @@ export default createStore({
     mutations: {
         setToken(state, token) {
             state.auth.token = token
+
+            localStorage.setItem('token', token)
         },
         clearToken(state) {
             state.auth.token = null;
+
+            localStorage.removeItem('token')
         },
     },
     actions: {
