@@ -46,10 +46,8 @@ class PostgresService:
     async def get_trip_items(self, item_type: TripItemsTypes, trip_id: int):
         data =[]
         trip_items = await self.client.select_by_filter(TripItem, {"type": item_type, "trip_id": trip_id})
-        print("this is trip items", trip_items)
         try:
             for trip_item in trip_items:
-                print("inside trip item")
                 data.append(
                     schemas.TripItem(
                         id= trip_item.id,
