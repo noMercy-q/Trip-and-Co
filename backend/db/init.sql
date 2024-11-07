@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS trip_participants (
 );
 
 DROP TYPE IF EXISTS TripItemsTypes;
-CREATE TYPE TripItemsTypes AS ENUM ('hotels', 'vehicle', 'attraction');
+CREATE TYPE TripItemsTypes AS ENUM ('hotel', 'vehicle', 'view');
 
 CREATE TABLE IF NOT EXISTS trip_items (
     id SERIAL PRIMARY KEY,

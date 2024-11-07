@@ -43,9 +43,9 @@ class Trip(Base):
     created_at = Column(DateTime)
 
 class TripItemsTypes(enum.Enum):
-    hotels = "hotels"
+    hotel = "hotel"
     vehicle = "vehicle"
-    attraction = "attraction"
+    view = "view"
 class TripItem(Base):
     __tablename__ = "trip_items"
 

@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
@@ -6,8 +7,12 @@ from app import schemas
 
 from db.client import PostgresClient
 from db.models import Trip, City, TripItem
+from sqlalchemy import select
+
+from backend.db.models import TripItemsTypes
 
 
+log = logging.getLogger(__name__)
 class PostgresService:
     def __init__(self, db_client: PostgresClient):
         self.client = db_client
@@ -37,7 +42,15 @@ class PostgresService:
         )
         return await self.client.create_record(new_trip_item)
     async def get_trip_items(self):
-        return await self.client.select_all(TripItem)
+        async with self.client.async_session() as session:
+
+            async with session.begin():
+                try:
+                    result = await session.execute(select(TripItem).where(TripItem.type == "view"))
+                    return result.scalars().all()
+                except Exception as e:
+                    log.error(f"Failed to execute query: {e}")
+                    return []
 
     async def create_trip(self, trip: schemas.TripCreate):
         new_trip = Trip(
