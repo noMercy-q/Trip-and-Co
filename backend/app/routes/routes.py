@@ -26,4 +26,7 @@ async def get_trip_items(trip_id: Optional[int] = None):
 
 router.post("/create_view")(create_trip_item)
 router.get("/tickets")(get_tickets)
+router.get("/votes")(get_votes)
 router.post("/votes")(create_vote)
+router.get("/comments")(get_comments)
+router.post("/comments")(create_comment)

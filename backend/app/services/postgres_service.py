@@ -1,10 +1,13 @@
 import logging
 from datetime import datetime
+from sqlite3 import connect
+
+from fastapi import Response
 
 from app import schemas
 
 from db.client import PostgresClient
-from db.models import Trip, City, TripItem, Vote
+from db.models import *
 from sqlalchemy import select
 
 from db.models import TripItemsTypes
@@ -88,6 +91,13 @@ class PostgresService:
         )
         return await self.client.create_record(new_trip)
 
+    async def get_votes(self, trip_item_id):
+        filters = {"trip_item_id": trip_item_id}
+        votes_count = await self.client.select_by_filter(Vote, filters, count_only=True)
+
+        return Response(content=str(votes_count), media_type="text/plain")
+
+
     async def create_vote(self, vote: schemas.Vote, user_id: str):
         new_vote = Vote(
             user_id=user_id,
@@ -96,3 +106,19 @@ class PostgresService:
         )
 
         return await self.client.create_record(new_vote)
+
+    async def get_comments(self, trip_item_id):
+        filters = {"trip_item_id": trip_item_id}
+        comments = await self.client.select_by_filter(Comment, filters)
+
+        return comments
+
+    async def create_comment(self, comment: schemas.Comment, user_id: str):
+        new_comment = Comment(
+            user_id=user_id,
+            trip_item_id=comment.trip_item_id,
+            content=comment.content,
+            created_at=datetime.utcnow()
+        )
+
+        return await self.client.create_record(new_comment)
