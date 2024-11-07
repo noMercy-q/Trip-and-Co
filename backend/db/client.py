@@ -39,6 +39,17 @@ class PostgresClient:
                     log.error(f"Failed to execute query: {e}")
                     return []
 
+    async def select_by_filter(self, table: Base, filters):
+        async with self.async_session() as session:
+            try:
+                stmt = select(table)
+                for attr, value in filters.items():
+                    stmt = stmt.filter(getattr(table, attr) == value)
+                result = await session.execute(stmt)
+                return result.scalars().all()
+            except SQLAlchemyError as e:
+                log.error(f"Failed to select by filter: {e}")
+                return None
 
     async def create_record(self, table_record: Base):
         async with self.async_session() as session:

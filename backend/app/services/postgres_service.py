@@ -1,7 +1,5 @@
 import logging
 from datetime import datetime
-from pydantic import BaseModel
-from typing import Optional
 
 from app import schemas
 
@@ -41,6 +39,7 @@ class PostgresService:
             image_url=trip_item.image_url
         )
         return await self.client.create_record(new_trip_item)
+
     async def get_trip_items(self):
         async with self.client.async_session() as session:
 

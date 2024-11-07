@@ -14,9 +14,10 @@ class AviasalesClient:
 
     async def get_latest_prices(
             self,
-            origin_airport: str,
-            destination_airport: str,
+            origin_city: str,
+            destination_city: str,
             month: str,
+            trip_duration: str,
     ):
         """
         Return the cheapest price for each dayes
@@ -29,10 +30,9 @@ class AviasalesClient:
         }
 
         params = {
-            "origin": origin_airport,
-            "destination": destination_airport,
+            "origin": origin_city,
+            "destination": destination_city,
             "month": month,
-            "token": self.__token,
             "currency": "rub",
             "show_to_affiliates": "false",
         }
@@ -41,6 +41,6 @@ class AviasalesClient:
         async with aiohttp.ClientSession() as session:
             try:
                 async with session.get(api_path, headers=headers, params=params) as resp:
-                    return await resp.text()
+                    return await resp.json()
             except aiohttp.ClientError as e:
                 log.error(e)
