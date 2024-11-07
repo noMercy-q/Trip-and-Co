@@ -1,6 +1,4 @@
 import logging
-from datetime import datetime
-from sqlite3 import connect
 
 from fastapi import Response
 
@@ -8,7 +6,6 @@ from app import schemas
 
 from db.client import PostgresClient
 from db.models import *
-from sqlalchemy import select
 
 from db.models import TripItemsTypes
 
@@ -65,16 +62,6 @@ class PostgresService:
         except TypeError as e:
             pass
         return data
-        # async with self.client.async_session() as session:
-        #
-        #     async with session.begin():
-        #         try:
-        #             result = await session.execute(select(TripItem).where(TripItem.type == "view" and
-        #                                                                   TripItem.trip_id == TripItem.trip_id))
-        #             return result.scalars().all()
-        #         except Exception as e:
-        #             log.error(f"Failed to execute query: {e}")
-        #             return []
 
     async def create_trip(self, trip: schemas.TripCreate):
         new_trip = Trip(
@@ -151,3 +138,18 @@ class PostgresService:
         )
 
         return await self.client.create_record(new_comment)
+
+    async def top_options(self, trip_id, best_tickets_data):
+        filters = {"trip_id": trip_id, "type": "hotel"}
+        top_hotel_id, votes_count = await self.client.select_with_join_and_group_by(TripItem, "id", Vote, "trip_item_id", filters, "id")
+        trip_item = await self.client.select_by_filter(TripItem, {"id": top_hotel_id})
+        trip_item = trip_item[0]
+        random_users = await self.client.select_all(User)
+
+        return {
+            "hotel": trip_item.name,
+            "total_cost": trip_item.cost + best_tickets_data["cost"],
+            "dates": f"{best_tickets_data["depart_date"]} to {best_tickets_data["return_data"]}",
+            "participants": [user.name for user in random_users[:3]]
+        }
+

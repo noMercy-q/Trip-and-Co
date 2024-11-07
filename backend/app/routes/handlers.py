@@ -49,3 +49,7 @@ async def get_comments(trip_item_id: int):
 
 async def create_comment(trip_item_id: schemas.Comment,  user: schemas.TokenPayloadData = Depends(get_current_user)):
     return await db_service.create_comment(trip_item_id, user.user_id)
+
+async def top_options(trip_id: int):
+    best_tickets_data = await aviasales_service.get_best_tickets_data(trip_id)
+    return await db_service.top_options(trip_id, best_tickets_data)

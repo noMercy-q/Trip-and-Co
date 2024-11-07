@@ -63,7 +63,6 @@ class PostgresClient:
             try:
                 join_condition = getattr(first_table, first_field) == getattr(second_table, second_field)
 
-                stmt = select(first_table)
                 stmt = select(first_table, second_table).select_from(join(first_table, second_table, join_condition))
 
                 for attr, value in filters.items():
@@ -73,6 +72,31 @@ class PostgresClient:
                 return result.all()
             except SQLAlchemyError as e:
                 log.error(f"Failed to execute join query: {e}")
+                return None
+
+    async def select_with_join_and_group_by(self, first_table: Base, first_field: str, second_table: Base,
+                                            second_field: str, filters: dict, group_by_field: str):
+        async with self.async_session() as session:
+            try:
+                join_condition = getattr(first_table, first_field) == getattr(second_table, second_field)
+                group_by_column = getattr(first_table, group_by_field)
+
+                stmt = (
+                    select(
+                        group_by_column,
+                        func.count().label('count')
+                    )
+                    .select_from(join(first_table, second_table, join_condition))
+                )
+
+                for attr, value in filters.items():
+                    stmt = stmt.filter(getattr(first_table, attr) == value)
+                stmt = stmt.group_by(group_by_column).order_by(func.count().desc())
+
+                result = await session.execute(stmt)
+                return result.first()
+            except SQLAlchemyError as e:
+                log.error(f"Failed to execute join and group by query: {e}")
                 return None
 
     async def create_record(self, table_record: Base):
@@ -93,11 +117,11 @@ class PostgresClient:
 #     db_client = PostgresClient()
 #     await db_client.connect()
 #
-#     from db.models import Vote
-#     filters = {"trip_item_id": 1}
+#     from db.models import Vote, Trip
+#     filters = {"id": 1}
 #     join_field = "user_id"
-#     c = await db_client.select_with_join(Comment, "user_id", User, "id", filters)
-#     print(c)
+#     c = await db_client.select_by_filter(Trip, filters)
+#     print(c[0].name)
 #
 # if __name__ == "__main__":
 #     asyncio.run(main())

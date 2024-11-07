@@ -1,10 +1,8 @@
-from os import sched_get_priority_max
-
 from api_clients.aviasales_client import AviasalesClient
 from db.models import Trip, City
 from db.client import PostgresClient
 from app import schemas
-
+from datetime import datetime, timedelta
 
 class AviasalesService:
     def __init__(self, aviasales_client: AviasalesClient, db_client: PostgresClient):
@@ -47,3 +45,19 @@ class AviasalesService:
             )
 
         return data
+
+    async def get_best_tickets_data(self, trip_id):
+        data = await self.parse_tickets(trip_id)
+
+        date_obj = datetime.strptime(data["to_origin"][0].depart_date, "%Y-%m-%d")
+        seven_days = timedelta(days=7)
+        new_date_obj = date_obj + seven_days
+        new_date_str = new_date_obj.strftime("%Y-%m-%d")
+
+        tickets_data = {
+            "cost": int(data["to_dest"][0].cost.split()[0]) + int(data["to_origin"][0].cost.split()[0]),
+            "depart_date": data["to_dest"][0].depart_date,
+            "return_data": new_date_str
+        }
+
+        return tickets_data
