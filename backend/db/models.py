@@ -54,6 +54,7 @@ class TripItem(Base):
     __tablename__ = "trip_items"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    trip_id = Column(Integer,  ForeignKey('trips.id'))
     type = Column(Enum(TripItemsTypes, name="tripitemstypes"), nullable=False)
     name = Column(String, nullable=True)
     description = Column(Text, nullable=True)

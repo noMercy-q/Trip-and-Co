@@ -62,6 +62,7 @@ CREATE TYPE TripItemsTypes AS ENUM ('hotel', 'vehicle', 'view');
 CREATE TABLE IF NOT EXISTS trip_items (
     id SERIAL PRIMARY KEY,
     type TripItemsTypes,
+    trip_id INT,
     name VARCHAR,
     description TEXT,
     details JSON,

@@ -6,13 +6,13 @@ class AmadeusService:
     def __init__(self, amadeus_client: AmadeusClient):
         self.client = amadeus_client
 
-    async def parse_plains_data(self):
-        hotels = await self.client.get_best_hotels()
+    async def parse_plains_data(self, airport_code: str = "NYC"):
+        hotels = await self.client.get_best_hotels(airport_code)
         len_hotels = max(10, len(hotels))
         for hotel in hotels[len_hotels]:
             new_trip = TripItem(
                 name=hotel["name"],
-                type = TripItemsTypes.hotels,
+                type = "hotel",
                 description = "best hotel ever",
                 details = "",
                 cost = 5000,

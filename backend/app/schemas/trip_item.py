@@ -3,8 +3,9 @@ from db.models import TripItemsTypes
 from pydantic import BaseModel
 
 
-class Trip(BaseModel):
+class TripItem(BaseModel):
     id:str
+    trip_id: int
     name: str
     type: TripItemsTypes
     description: str | None = None
@@ -14,6 +15,7 @@ class Trip(BaseModel):
     image_url: str | None = None
 class TripItemCreate(BaseModel):
     name: str
+    trip_id: int
     type: TripItemsTypes
     description: str | None = None
     details: dict | None = None

@@ -28,12 +28,12 @@ class AmadeusClient:
                 return access_token
 
 
-    async def get_best_hotels(self):
+    async def get_best_hotels(self, airport_code: str):
         access_token = await  self.get_token()
         headers = {'Authorization': 'Bearer' + ' ' + access_token}
         hotel_lists_url = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city'
         hotel_lists_params = {
-            "cityCode": "BDH",
+            "cityCode": airport_code,
             "radius": 100,
             "radiusUnit": "KM",
             "hotelSource": "ALL"

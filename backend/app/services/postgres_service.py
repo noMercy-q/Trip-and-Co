@@ -46,7 +46,8 @@ class PostgresService:
 
             async with session.begin():
                 try:
-                    result = await session.execute(select(TripItem).where(TripItem.type == "view"))
+                    result = await session.execute(select(TripItem).where(TripItem.type == "view" and
+                                                                          TripItem.trip_id == TripItem.trip_id))
                     return result.scalars().all()
                 except Exception as e:
                     log.error(f"Failed to execute query: {e}")

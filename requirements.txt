@@ -5,3 +5,5 @@ sqlalchemy
 asyncpg
 greenlet
 uvicorn
+passlib
+jwt
