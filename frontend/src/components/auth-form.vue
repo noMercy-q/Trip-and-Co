@@ -37,6 +37,20 @@
           ></v-text-field>
 
           <v-text-field
+              v-if="!isLoginForm"
+              class="mx-auto"
+              density="compact"
+              label="Name"
+              max-width="300"
+              persistent-placeholder
+              placeholder="Ivanov I."
+              prepend-inner-icon="mdi-account"
+              variant="outlined"
+              v-model="name"
+
+          ></v-text-field>
+
+          <v-text-field
               class="mx-auto"
               density="compact"
               :rules="rules.passwordRules"
@@ -100,12 +114,13 @@
 </template>
 
 <script>
-import axios from "axios";
+import apiClient from "@/api/axios";
 
 export default {
   data() {
     return {
       email: '',
+      name: '',
       password: '',
       confirmPassword: '',
       rememberMe: false,
@@ -118,14 +133,9 @@ export default {
         ],
         passwordRules: [
           v => !!v || "Password is required",
-          v => (v && v.length >= 8) || "Password must be at least 8 characters",
-          v => /(?=.*[A-Z])/.test(v) || "Must have one uppercase character",
-          v => /(?=.*\d)/.test(v) || "Must have one number",
-          v => /([!@$%<>*''])/.test(v) || "Must have one special character [!@#$%]"
         ],
         confirmPasswordRules: [
           v => !!v || "Confirm Password is required",
-          v => (v && v.length >= 8) || "Confirm Password must be at least 8 characters",
           v => v === this.password || "Passwords do not match"
         ]
       }
@@ -141,10 +151,16 @@ export default {
       const endpoint = this.isLoginForm ? "auth/login" : "auth/register"
 
       try {
-        const response = await axios.post(endpoint, {
+
+        const response = await apiClient.post(endpoint, {
           email: this.email,
+          name: this.name,
           password: this.password,
         })
+
+        this.$store.commit('setToken', response.data['access_token'])
+
+        this.$router.push("/")
 
 
         console.log(response.data)
@@ -152,13 +168,7 @@ export default {
         console.log("error on submit: ", e)
       }
 
-      this.$store.commit('setToken', "token") // TODO: исправить
-
-      this.$router.push("/")
-
       this.isSubmitting = false;
-
-
     },
     toggleForm() {
       // Логика перехода на страницу регистрации
