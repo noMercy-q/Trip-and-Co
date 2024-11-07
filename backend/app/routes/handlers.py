@@ -19,16 +19,17 @@ async def create_trip(trip: schemas.TripCreate, user: schemas.TokenPayloadData =
 
     trip._invite_token = generate_invite_token(INVITE_TOKEN_LENGTH)
     trip._created_by = uuid.UUID(user.user_id)
-
-    return await db_service.create_trip(trip)
+    created_trip = await db_service.create_trip(trip)
+    await amadeus_service.get_hotels(created_trip.id, created_trip.dest_city_id)
+    return created_trip
 #
 # async def join_trip(invite_token: str = Query(), user: schemas.TokenPayloadData = Depends(get_current_user)):
 #     get_trip_by_invite_token
 
 async def create_trip_item(trip_item: schemas.TripItemCreate):
-    created_trip = db_service.create_trip_item(trip_item)
-    res =await amadeus_service.get_hotels(created_trip["id"], created_trip["dest_city_id"])
-    return reos
+    return await  db_service.create_trip_item(trip_item)
+
+
 async def trip_items_handler(trip_id: int):
     return await db_service.get_trip_items("view", trip_id)
 
