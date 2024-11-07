@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class TripItem(BaseModel):
-    id:str
+    id:int
     trip_id: int
     name: str
     type: TripItemsTypes

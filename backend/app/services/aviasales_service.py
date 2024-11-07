@@ -32,7 +32,7 @@ class AviasalesService:
                     depart_date=ticket["depart_date"],
                     origin=ticket["origin"],
                     destination=ticket["destination"],
-                    cost=f"{ticket["value"]} RUB"
+                    cost=f'{ticket["value"]} RUB'
                 )
             )
 
@@ -42,7 +42,7 @@ class AviasalesService:
                     depart_date=ticket["depart_date"],
                     origin=ticket["origin"],
                     destination=ticket["destination"],
-                    cost=f"{ticket["value"]} RUB"
+                    cost=f"{ticket['value']} RUB"
                 )
             )
 

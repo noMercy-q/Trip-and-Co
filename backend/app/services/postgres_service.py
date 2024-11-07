@@ -31,6 +31,7 @@ class PostgresService:
     async def create_trip_item(self, trip_item: schemas.TripItemCreate):
         new_trip_item = TripItem(
             name=trip_item.name,
+            trip_id=trip_item.trip_id,
             type=trip_item.type,
             description= trip_item.description,
             details=trip_item.details,
@@ -40,17 +41,40 @@ class PostgresService:
         )
         return await self.client.create_record(new_trip_item)
 
-    async def get_trip_items(self):
-        async with self.client.async_session() as session:
+    async def get_trip_items(self, item_type: TripItemsTypes, trip_id: int):
+        data =[]
+        trip_items = await self.client.select_by_filter(TripItem, {"type": item_type, "trip_id": trip_id})
+        print("this is trip items", trip_items)
+        try:
+            for trip_item in trip_items:
+                print("inside trip item")
+                data.append(
+                    schemas.TripItem(
+                        id= trip_item.id,
+                        trip_id= int(trip_item.trip_id),
+                        name =trip_item.name,
+                        type=trip_item.type,
+                        descriptrion=trip_item.description,
+                        details=trip_item.details,
+                        cost=trip_item.cost,
+                        link_url=trip_item.link_url,
+                        image_url=trip_item.image_url
+                        ),
+                    )
 
-            async with session.begin():
-                try:
-                    result = await session.execute(select(TripItem).where(TripItem.type == "view" and
-                                                                          TripItem.trip_id == TripItem.trip_id))
-                    return result.scalars().all()
-                except Exception as e:
-                    log.error(f"Failed to execute query: {e}")
-                    return []
+        except TypeError as e:
+            pass
+        return data
+        # async with self.client.async_session() as session:
+        #
+        #     async with session.begin():
+        #         try:
+        #             result = await session.execute(select(TripItem).where(TripItem.type == "view" and
+        #                                                                   TripItem.trip_id == TripItem.trip_id))
+        #             return result.scalars().all()
+        #         except Exception as e:
+        #             log.error(f"Failed to execute query: {e}")
+        #             return []
 
     async def create_trip(self, trip: schemas.TripCreate):
         new_trip = Trip(

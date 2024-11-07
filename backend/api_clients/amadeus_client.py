@@ -7,9 +7,7 @@ import asyncio
 log = logging.getLogger(__name__)
 
 class AmadeusClient:
-    def __init__(self, token: str, base_url: str = 'https://api.travelpayouts.com'):
-        self.__token = token
-        self.base_url = base_url
+    def __init__(self):
         self._auth_url="https://test.api.amadeus.com/v1/security/oauth2/token"
         self._client_id = 'rIFYAdJnDDHb8ZZCg7BruAXDtRhAjD3H'
         self._client_secret = 'uDLYx7pECWvkIpAx'
