@@ -1,6 +1,5 @@
 
 from api_clients.amadeus_client import AmadeusClient
-from backend.app import db_service
 from db.models import Trip, City, TripItem, TripItemsTypes
 
 from backend.app import schemas
@@ -28,14 +27,3 @@ class AmadeusService:
             )
             db_service.create_trip_item(new_trip)
 
-                id=trip_item.id,
-                trip_id=int(trip_item.trip_id),
-                name=trip_item.name,
-                type=trip_item.type,
-                descriptrion=trip_item.description,
-                details=trip_item.details,
-                cost=trip_item.cost,
-                link_url=trip_item.link_url,
-                image_url=trip_item.image_url
-
-                .create_record(new_trip)

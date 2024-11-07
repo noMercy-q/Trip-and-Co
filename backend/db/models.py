@@ -1,10 +1,9 @@
 import enum
 
-from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, Enum, JSON, DECIMAL
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, UUID
+from sqlalchemy import Column, String, ForeignKey, Integer, Text, DateTime, UUID, Enum, JSON, DECIMAL
 from sqlalchemy.ext.declarative import declarative_base
 
 
@@ -31,7 +30,7 @@ class User(Base):
     name = Column(String)
     email = Column(String, unique=True)
     password_hash = Column(String)
-    created_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime, default=datetime.utcnow())
 
 class Trip(Base):
     __tablename__ = 'trips'
@@ -63,3 +62,10 @@ class TripItem(Base):
     link_url = Column(Text, nullable=True)
     image_url = Column(Text, nullable=True)
 
+class Vote(Base):
+    __tablename__ = "votes"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(UUID, ForeignKey('users.id'))
+    trip_item_id = Column(Integer, ForeignKey('trip_items.id'))
+    created_at = Column(DateTime)
