@@ -1,5 +1,5 @@
 <template>
-<v-card width="300" height="300" class="rounded-xl" variant="outlined">
+<v-card width="300" min-height="300" class="rounded-xl" variant="outlined">
   <v-img
     cover
     :src="hotel.imageUrl"
@@ -19,18 +19,34 @@
   </v-card-text>
 
   <v-card-actions class="d-flex justify-end ma-2">
-    <v-btn color="white" text="Upvote" />
+    <v-btn color="white" text="Upvote" @click="upvote(hotel.id)"/>
   </v-card-actions>
 </v-card>
 </template>
 
 <script>
+import apiClient from '../api/axios';
 
 export default {
   name: "HotelCard",
   
   props: {
     hotel: Object
+  },
+
+  methods: {
+    async upvote(hotelId) {
+      try {
+        await apiClient.post('votes', {
+          trip_item_id: hotelId
+        });
+
+      } catch (error) {
+        console.error("Error upvoting:", error);
+      } finally {
+        this.isSubmitting = false;
+      }
+    }
   }
 }
 </script>
