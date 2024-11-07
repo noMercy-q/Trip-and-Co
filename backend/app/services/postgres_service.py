@@ -116,6 +116,7 @@ class PostgresService:
         for comment_user in comments:
             data.append(
                 {
+                    "user_id": comment_user[0].user_id,
                     "name": comment_user[1].name,
                     "trip_item_id": comment_user[0].trip_item_id,
                     "created_at": comment_user[0].created_at
