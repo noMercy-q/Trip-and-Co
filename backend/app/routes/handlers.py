@@ -1,5 +1,5 @@
 from fastapi import Request
-from backend.app import db_service, schemas, aviasales_service, amadeus_service
+from app import db_service, schemas, aviasales_service, amadeus_service
 from fastapi import Depends
 from app import db_service, schemas, aviasales_service
 from app.routes.utils import get_current_user

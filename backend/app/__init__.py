@@ -10,8 +10,8 @@ from db.user_repo import UserRepository
 
 from dotenv import load_dotenv
 
-from backend.api_clients.amadeus_client import AmadeusClient
-from backend.app.services.amadeus_service import AmadeusService
+from api_clients.amadeus_client import AmadeusClient
+from app.services.amadeus_service import AmadeusService
 
 load_dotenv()  # take environment variables from .env.
 

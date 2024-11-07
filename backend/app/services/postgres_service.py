@@ -111,7 +111,18 @@ class PostgresService:
         filters = {"trip_item_id": trip_item_id}
         comments = await self.client.select_by_filter(Comment, filters)
 
-        return comments
+        comments.sort(key=lambda x: x.created_at)
+        data = []
+        for comment in comments:
+            data.append(
+                {
+                    "user_id": comment.user_id,
+                    "trip_item_id": comment.trip_item_id,
+                    "created_at": comment.created_at
+                }
+            )
+
+        return data
 
     async def create_comment(self, comment: schemas.Comment, user_id: str):
         new_comment = Comment(

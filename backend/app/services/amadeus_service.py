@@ -2,8 +2,8 @@
 from api_clients.amadeus_client import AmadeusClient
 from db.models import Trip, City, TripItem, TripItemsTypes
 
-from backend.app import schemas
-from backend.db.client import PostgresClient
+from app import schemas
+from db.client import PostgresClient
 
 
 class AmadeusService:
