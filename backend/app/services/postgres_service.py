@@ -109,16 +109,16 @@ class PostgresService:
 
     async def get_comments(self, trip_item_id):
         filters = {"trip_item_id": trip_item_id}
-        comments = await self.client.select_by_filter(Comment, filters)
+        comments = await self.client.select_with_join(Comment, "user_id", User, "id", filters)
 
-        comments.sort(key=lambda x: x.created_at)
+        comments.sort(key=lambda x: x[0].created_at)
         data = []
-        for comment in comments:
+        for comment_user in comments:
             data.append(
                 {
-                    "user_id": comment.user_id,
-                    "trip_item_id": comment.trip_item_id,
-                    "created_at": comment.created_at
+                    "name": comment_user[1].name,
+                    "trip_item_id": comment_user[0].trip_item_id,
+                    "created_at": comment_user[0].created_at
                 }
             )
 
