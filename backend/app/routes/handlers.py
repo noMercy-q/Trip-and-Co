@@ -17,8 +17,8 @@ async def create_trip(trip: schemas.TripCreate):
 
 async def create_trip_item(trip_item: schemas.TripItemCreate):
     created_trip = db_service.create_trip_item(trip_item)
-    # await amadeus_service.send_trip_item(trip_item["id"], trip_item["dest_city_id"])
-    return created_trip
+    res =await amadeus_service.get_hotels(created_trip["id"], created_trip["dest_city_id"])
+    return reos
 async def trip_items_handler(trip_id: int):
     return await db_service.get_trip_items("view", trip_id)
 

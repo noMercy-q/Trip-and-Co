@@ -22,7 +22,7 @@ db_service = PostgresService(db_client)
 aviasales_client = AviasalesClient(os.environ.get("AVIA_TOKEN"))
 amadeus_client = AmadeusClient()
 aviasales_service = AviasalesService(aviasales_client, db_client)
-amadeus_service = AmadeusService(amadeus_client,db_client)
+amadeus_service = AmadeusService(amadeus_client,db_service)
 
 user_repo = UserRepository(db_client)
 auth_service = AuthService(user_repo)
