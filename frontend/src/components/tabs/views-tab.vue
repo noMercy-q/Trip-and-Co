@@ -20,7 +20,7 @@
             </v-card-text>
 
             <v-card-actions class="d-flex justify-end ma-2">
-              <v-btn color="white" text="Upvote" />
+              <v-btn color="white" text="Upvote" @click="upvote(view.id)" />
             </v-card-actions>
           </v-card>
         </v-sheet>
@@ -210,6 +210,19 @@
           console.error("Error creating view:", error);
         } finally {
           this.showDialog = false;
+        }
+      },
+
+      async upvote(viewId) {
+        try {
+          await apiClient.post('votes', {
+            trip_item_id: viewId
+          });
+
+        } catch (error) {
+          console.error("Error upvoting:", error);
+        } finally {
+          this.isSubmitting = false;
         }
       }
     }

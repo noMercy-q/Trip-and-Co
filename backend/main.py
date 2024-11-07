@@ -32,9 +32,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_middleware(
-    JWTMiddleware,
-)
+# app.add_middleware(
+#     JWTMiddleware,
+# )
 
 
 if __name__ == "__main__":

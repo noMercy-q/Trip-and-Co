@@ -62,7 +62,7 @@
     data: () => ({
       text: 'Soon',
       selectedDates: [],
-      tab: 4,
+      tab: 1,
       minDate: new Date(2024, 10, 5).toISOString(),
       maxDate: new Date(2024, 10, 28).toISOString(),
       cities: []
