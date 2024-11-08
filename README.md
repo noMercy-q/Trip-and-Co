@@ -24,8 +24,8 @@
 ## Полезные ресурсы
 
 - [Страница на cs-uni.ru](https://cs-uni.ru/index.php?title=DDF24_TripAndCo)
-- [Презентация]()
-- [Видео]()
+- [Презентация](https://docs.google.com/presentation/d/12k2GQclP49nOczdCk603PitXAQEPJRWr/edit?usp=sharing&ouid=114585532466377169577&rtpof=true&sd=true)
+- [Видео](https://drive.google.com/file/d/1MiC1Blga2wrYgSxYojjgqtgl43jP0qfp/view?usp=sharing)
 
 ## Описание проекта
 
